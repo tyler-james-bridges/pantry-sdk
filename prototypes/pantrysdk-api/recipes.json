@@ -1,0 +1,57 @@
+[
+  {
+    "id": "banana-bread",
+    "name": "Banana Bread",
+    "servings": 8,
+    "ingredients": [
+      { "name": "banana", "amount": 3, "unit": "count" },
+      { "name": "flour", "amount": 2, "unit": "cup" },
+      { "name": "sugar", "amount": 0.75, "unit": "cup" },
+      { "name": "egg", "amount": 2, "unit": "count" },
+      { "name": "butter", "amount": 0.5, "unit": "cup" }
+    ]
+  },
+  {
+    "id": "choc-chip-cookies",
+    "name": "Chocolate Chip Cookies",
+    "servings": 24,
+    "ingredients": [
+      { "name": "flour", "amount": 2.25, "unit": "cup" },
+      { "name": "sugar", "amount": 0.75, "unit": "cup" },
+      { "name": "brown sugar", "amount": 0.75, "unit": "cup" },
+      { "name": "egg", "amount": 2, "unit": "count" },
+      { "name": "butter", "amount": 1, "unit": "cup" },
+      { "name": "chocolate chips", "amount": 2, "unit": "cup" }
+    ]
+  },
+  {
+    "id": "perfect-cc-cookies",
+    "name": "Perfect Chocolate Chip Cookies",
+    "servings": 8,
+    "notes": [
+      "Brown the butter before mixing for deeper flavor",
+      "Chill dough 10-30 minutes for better texture",
+      "Bake at 350°F for 10-12 minutes"
+    ],
+    "steps": [
+      "Brown the butter, then let it cool slightly.",
+      "Whisk in sugars until glossy.",
+      "Mix in egg and vanilla.",
+      "Fold in salt, baking soda, and flour.",
+      "Fold in chocolate chips.",
+      "Scoop dough, sprinkle finishing salt, and bake at 350°F for 10-12 minutes."
+    ],
+    "ingredients": [
+      { "name": "butter", "amount": 8, "unit": "tbsp" },
+      { "name": "sugar", "amount": 0.5, "unit": "cup" },
+      { "name": "dark brown sugar", "amount": 0.5, "unit": "cup" },
+      { "name": "egg", "amount": 1, "unit": "count" },
+      { "name": "vanilla", "amount": 1, "unit": "tsp" },
+      { "name": "kosher salt", "amount": 0.5, "unit": "tsp" },
+      { "name": "baking soda", "amount": 0.5, "unit": "tsp" },
+      { "name": "ap flour", "amount": 1.333, "unit": "cup" },
+      { "name": "chocolate chips", "amount": 1, "unit": "cup" },
+      { "name": "finishing salt", "amount": 0.25, "unit": "tsp" }
+    ]
+  }
+]

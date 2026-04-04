@@ -1,0 +1,78 @@
+### List recipes
+GET http://localhost:8787/recipes
+
+### Scale recipe
+POST http://localhost:8787/scale-recipe
+Content-Type: application/json
+
+{
+  "recipeId": "banana-bread",
+  "targetServings": 12
+}
+
+### Shopping list from two recipes
+POST http://localhost:8787/shopping-list
+Content-Type: application/json
+
+{
+  "recipeIds": ["banana-bread", "choc-chip-cookies"]
+}
+
+### Substitution suggestions
+POST http://localhost:8787/substitute
+Content-Type: application/json
+
+{
+  "ingredient": "egg"
+}
+
+### Plan meal (summary + shopping list)
+POST http://localhost:8787/plan-meal
+Content-Type: application/json
+
+{
+  "recipes": [
+    { "recipeId": "perfect-cc-cookies", "servings": 16 },
+    { "recipeId": "banana-bread", "servings": 8 }
+  ]
+}
+
+### Transform recipe (diet profile + sugar cap)
+POST http://localhost:8787/recipe/perfect-cc-cookies/transform
+Content-Type: application/json
+
+{
+  "dietaryProfile": "dairy-free",
+  "maxSugarCup": 0.75,
+  "servings": 12
+}
+
+### Pantry match
+POST http://localhost:8787/pantry-match
+Content-Type: application/json
+
+{
+  "pantryItems": ["flour", "egg", "butter", "sugar", "banana"],
+  "limit": 3
+}
+
+### Leftovers remix
+POST http://localhost:8787/leftovers-remix
+Content-Type: application/json
+
+{
+  "leftovers": ["rice", "chicken"],
+  "pantry": ["egg", "soy sauce", "green onion"]
+}
+
+### Batch prep plan
+POST http://localhost:8787/batch-prep
+Content-Type: application/json
+
+{
+  "days": 4,
+  "recipes": [
+    { "recipeId": "perfect-cc-cookies", "servings": 16 },
+    { "recipeId": "banana-bread", "servings": 8 }
+  ]
+}
