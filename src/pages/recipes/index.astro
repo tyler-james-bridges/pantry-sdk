@@ -1,0 +1,21 @@
+---
+import Base from "../../layouts/Base.astro";
+import { listRecipes } from "../../lib/pantry-client";
+
+const { recipes } = await listRecipes();
+---
+
+<Base title="Recipes | PantrySDK">
+  <h1>Recipes</h1>
+  <p>Powered by PantrySDK utilities + EmDash pages.</p>
+
+  <ul>
+    {recipes.map((r) => (
+      <li>
+        <a href={`/recipes/${r.id}`}>{r.name}</a> — {r.servings} servings
+      </li>
+    ))}
+  </ul>
+
+  <p><a href="/meal-planner">Go to Meal Planner →</a></p>
+</Base>

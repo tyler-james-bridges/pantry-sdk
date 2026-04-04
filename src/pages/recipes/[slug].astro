@@ -1,0 +1,54 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getRecipe, scaleRecipe } from "../../lib/pantry-client";
+
+const { slug } = Astro.params;
+if (!slug) throw new Error("Missing slug");
+
+const requestedServings = Number(Astro.url.searchParams.get("servings") || "0");
+const recipe = await getRecipe(slug);
+const activeServings = requestedServings > 0 ? requestedServings : recipe.servings;
+const scaled = await scaleRecipe(slug, activeServings);
+
+const options = [Math.max(1, Math.floor(recipe.servings / 2)), recipe.servings, recipe.servings * 2];
+---
+
+<Base title={`${recipe.name} | PantrySDK`}>
+  <p><a href="/recipes">← Back to recipes</a></p>
+  <h1>{recipe.name}</h1>
+
+  <p>
+    Servings: <strong>{scaled.targetServings}</strong>
+    {' '}| Factor: <strong>×{scaled.factor}</strong>
+  </p>
+
+  <p>
+    Scale to:
+    {options.map((n) => (
+      <a href={`?servings=${n}`} style="margin-right:8px;">{n}</a>
+    ))}
+  </p>
+
+  <h2>Ingredients</h2>
+  <ul>
+    {scaled.ingredients.map((i) => (
+      <li><strong>{i.amount} {i.unit}</strong> {i.name}</li>
+    ))}
+  </ul>
+
+  {recipe.notes && recipe.notes.length > 0 && (
+    <>
+      <h2>Notes</h2>
+      <ul>{recipe.notes.map((n) => <li>{n}</li>)}</ul>
+    </>
+  )}
+
+  {recipe.steps && recipe.steps.length > 0 && (
+    <>
+      <h2>Steps</h2>
+      <ol>{recipe.steps.map((s) => <li>{s}</li>)}</ol>
+    </>
+  )}
+
+  <p><a href="/meal-planner">Add this to meal planner →</a></p>
+</Base>
