@@ -3,7 +3,7 @@ import { wrapFetchWithPaymentFromConfig, decodePaymentResponseHeader } from '@x4
 import { ExactEvmScheme } from '@x402/evm';
 import { privateKeyToAccount } from 'viem/accounts';
 
-const API_URL = process.env.PANTRY_API_URL || 'http://localhost:8795/plan-meal';
+const API_URL = process.env.PANTRY_API_URL || 'http://localhost:8787/plan-meal';
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 if (!PRIVATE_KEY || !PRIVATE_KEY.startsWith('0x')) {

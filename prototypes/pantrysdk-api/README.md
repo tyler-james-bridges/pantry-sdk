@@ -15,7 +15,7 @@ A tiny local API that turns recipe content into useful utilities:
 ## Quick start
 
 ```bash
-cd /Users/tjb/.openclaw/workspace-ops/pantrysdk-mvp
+cd prototypes/pantrysdk-api
 npm install
 npm run dev
 ```
