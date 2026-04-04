@@ -4,3 +4,8 @@ dist
 uploads
 data.db
 .wrangler
+# Local/private specs (never commit)
+**/spec.md
+**/spec-*.md
+**/*-spec.md
+**/SPEC*.md
