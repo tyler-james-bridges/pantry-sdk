@@ -1,0 +1,65 @@
+---
+import Base from "../layouts/Base.astro";
+import { listRecipes, planMeal } from "../lib/pantry-client";
+
+const { recipes } = await listRecipes();
+
+const selected = Astro.url.searchParams.getAll("r");
+const servingsMap: Record<string, number> = {};
+for (const r of recipes) {
+  const s = Number(Astro.url.searchParams.get(`s_${r.id}`) || r.servings);
+  servingsMap[r.id] = Number.isFinite(s) && s > 0 ? s : r.servings;
+}
+
+let result = null;
+if (selected.length > 0) {
+  const payload = selected.map((id) => ({ recipeId: id, servings: servingsMap[id] || recipes.find(r => r.id === id)?.servings || 1 }));
+  result = await planMeal(payload);
+}
+---
+
+<Base title="Meal Planner | PantrySDK">
+  <h1>Meal Planner</h1>
+  <p>Select recipes + servings to generate a combined shopping list.</p>
+
+  <form method="GET">
+    <ul>
+      {recipes.map((r) => (
+        <li>
+          <label>
+            <input type="checkbox" name="r" value={r.id} checked={selected.includes(r.id)} />
+            {' '}{r.name}
+          </label>
+          {' '}
+          <input
+            type="number"
+            min="1"
+            name={`s_${r.id}`}
+            value={servingsMap[r.id]}
+            style="width:70px;"
+          />
+          {' '}servings
+        </li>
+      ))}
+    </ul>
+    <button type="submit">Generate Meal Plan</button>
+  </form>
+
+  {result && (
+    <>
+      <h2>Plan</h2>
+      <ul>
+        {result.mealPlan.map((m) => (
+          <li><a href={`/recipes/${m.recipeId}?servings=${m.servings}`}>{m.recipeName}</a> — {m.servings} servings</li>
+        ))}
+      </ul>
+
+      <h2>Shopping List ({result.prepSummary.totalUniqueIngredients} items)</h2>
+      <ul>
+        {result.shoppingList.map((i) => (
+          <li><strong>{i.amount} {i.unit}</strong> {i.name}</li>
+        ))}
+      </ul>
+    </>
+  )}
+</Base>
