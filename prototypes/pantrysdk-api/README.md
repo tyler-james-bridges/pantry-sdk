@@ -136,6 +136,27 @@ Look for:
 "x402": { "enabled": true, "network": "base-sepolia" }
 ```
 
+### 4) Run a paid-call proof (official x402 client + viem)
+
+Install deps in this folder:
+
+```bash
+npm install
+```
+
+Then run:
+
+```bash
+PRIVATE_KEY=0xYOUR_EVM_PRIVATE_KEY \
+PANTRY_API_URL=https://YOUR_PUBLIC_URL/plan-meal \
+npm run pay:test
+```
+
+This uses `@x402/fetch` + `@x402/evm` and will:
+- request the paid endpoint
+- handle 402 payment flow automatically
+- print paid response and payment metadata
+
 ### Premium endpoints (paid when enabled)
 - `POST /shopping-list`
 - `POST /substitute`
