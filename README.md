@@ -54,3 +54,4 @@ Or click the deploy button above to set up the project in your Cloudflare accoun
 - [EmDash documentation](https://github.com/emdash-cms/emdash/tree/main/docs)
 # Cloudflare Workers Paid Plan - EmDash Ready
 # Retry deployment - KV namespace fix
+// Force deployment: Sun Apr  5 14:53:00 MST 2026
