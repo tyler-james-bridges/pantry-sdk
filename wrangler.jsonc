@@ -19,13 +19,6 @@
 			"remote": true
 		},
 	],
-	"kv_namespaces": [
-		{
-			"binding": "SESSION",
-			"id": "",
-			"preview_id": ""
-		}
-	],
 	"r2_buckets": [
 		{
 			"binding": "MEDIA",
