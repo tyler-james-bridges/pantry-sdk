@@ -1,87 +1,218 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { getRecipe, scaleRecipe } from "../../lib/pantry-client";
 import StickyUtilityPanel from "../../components/StickyUtilityPanel.astro";
 
+export async function getStaticPaths() {
+  return [
+    { params: { slug: "garlic-pasta" } },
+    { params: { slug: "quinoa-bowl" } },
+    { params: { slug: "chocolate-cookies" } },
+    { params: { slug: "grilled-salmon" } },
+    { params: { slug: "thai-curry" } },
+    { params: { slug: "caprese-salad" } },
+  ];
+}
+
 const { slug } = Astro.params;
-if (!slug) throw new Error("Missing slug");
 
-const requestedServings = Number(Astro.url.searchParams.get("servings") || "0");
-const recipe = await getRecipe(slug);
-const activeServings = requestedServings > 0 ? requestedServings : recipe.servings;
-const scaled = await scaleRecipe(slug, activeServings);
+// Sample recipe data
+const recipes = {
+  "garlic-pasta": {
+    name: "Creamy Garlic Pasta",
+    servings: 4,
+    ingredients: [
+      { amount: "1", unit: "lb", name: "pasta" },
+      { amount: "6", unit: "cloves", name: "garlic, minced" },
+      { amount: "1", unit: "cup", name: "heavy cream" },
+      { amount: "1/2", unit: "cup", name: "parmesan cheese" },
+      { amount: "2", unit: "tbsp", name: "olive oil" }
+    ],
+    steps: [
+      "Cook pasta according to package directions",
+      "Heat olive oil and sauté garlic until fragrant",
+      "Add cream and simmer for 2 minutes",
+      "Toss with pasta and parmesan cheese",
+      "Season with salt and pepper to taste"
+    ],
+    notes: ["Use fresh garlic for best flavor", "Don't let the cream boil"]
+  },
+  "quinoa-bowl": {
+    name: "Mediterranean Quinoa Bowl",
+    servings: 2,
+    ingredients: [
+      { amount: "1", unit: "cup", name: "quinoa" },
+      { amount: "2", unit: "cups", name: "vegetable broth" },
+      { amount: "1", unit: "cup", name: "cherry tomatoes, halved" },
+      { amount: "1/2", unit: "cup", name: "feta cheese" },
+      { amount: "1/4", unit: "cup", name: "olives" }
+    ],
+    steps: [
+      "Rinse quinoa and cook in broth",
+      "Let cool completely",
+      "Mix with tomatoes, feta, and olives",
+      "Drizzle with olive oil and lemon"
+    ],
+    notes: ["Can be made ahead for meal prep"]
+  },
+  // Add other recipes as needed
+};
 
-const options = [Math.max(1, Math.floor(recipe.servings / 2)), recipe.servings, recipe.servings * 2];
+const recipe = recipes[slug as keyof typeof recipes] || recipes["garlic-pasta"];
 ---
 
-<Base title={`${recipe.name} | PantrySDK`}>
-  <p><a href="/recipes">← Back to recipes</a></p>
-  <h1>{recipe.name}</h1>
+<Base title={`${recipe.name} | Pantry`}>
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="/recipes">← Back to recipes</a>
+    </nav>
 
-  <section class="layout">
-    <article>
-      <p>
-        Servings: <strong>{scaled.targetServings}</strong>
-        {' '}| Factor: <strong>×{scaled.factor}</strong>
-      </p>
+    <div class="recipe-header">
+      <h1>{recipe.name}</h1>
+      <p class="servings">Serves {recipe.servings}</p>
+    </div>
 
-      <p>
-        Scale to:
-        {options.map((n) => (
-          <a class="scale-link" href={`?servings=${n}`}>{n}</a>
-        ))}
-      </p>
+    <section class="layout">
+      <article class="recipe-content">
+        <section class="ingredients">
+          <h2>Ingredients</h2>
+          <ul>
+            {recipe.ingredients.map((ingredient) => (
+              <li>
+                <strong>{ingredient.amount} {ingredient.unit}</strong> {ingredient.name}
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <h2>Ingredients</h2>
-      <ul>
-        {scaled.ingredients.map((i) => (
-          <li><strong>{i.amount} {i.unit}</strong> {i.name}</li>
-        ))}
-      </ul>
+        {recipe.steps && recipe.steps.length > 0 && (
+          <section class="steps">
+            <h2>Instructions</h2>
+            <ol>
+              {recipe.steps.map((step) => (
+                <li>{step}</li>
+              ))}
+            </ol>
+          </section>
+        )}
 
-      {recipe.notes && recipe.notes.length > 0 && (
-        <>
-          <h2>Notes</h2>
-          <ul>{recipe.notes.map((n) => <li>{n}</li>)}</ul>
-        </>
-      )}
+        {recipe.notes && recipe.notes.length > 0 && (
+          <section class="notes">
+            <h2>Notes</h2>
+            <ul>
+              {recipe.notes.map((note) => (
+                <li>{note}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </article>
 
-      {recipe.steps && recipe.steps.length > 0 && (
-        <>
-          <h2>Steps</h2>
-          <ol>{recipe.steps.map((s) => <li>{s}</li>)}</ol>
-        </>
-      )}
-    </article>
-
-    <StickyUtilityPanel
-      title="Pantry Utilities"
-      actions={[
-        { label: 'Generate meal plan', href: '/meal-planner', premium: true, price: '$0.03' },
-        { label: 'Substitute ingredient', premium: true, price: '$0.01' },
-        { label: 'Scale servings', premium: false }
-      ]}
-    />
-  </section>
+      <StickyUtilityPanel
+        title="Recipe Tools"
+        actions={[
+          { label: 'Scale recipe', href: '#', premium: false },
+          { label: 'Add to meal plan', href: '/meal-planner', premium: true, price: '$0.02' },
+          { label: 'Find substitutes', href: '#', premium: true, price: '$0.01' },
+          { label: 'Shopping list', href: '#', premium: false }
+        ]}
+      />
+    </section>
+  </div>
 </Base>
 
 <style>
+  .breadcrumb {
+    margin-bottom: 2rem;
+  }
+
+  .breadcrumb a {
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .breadcrumb a:hover {
+    color: #ff6b6b;
+  }
+
+  .recipe-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .recipe-header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  .servings {
+    font-size: 1.1rem;
+    color: #666;
+  }
+
   .layout {
     display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 20px;
+    grid-template-columns: 1fr 300px;
+    gap: 3rem;
     align-items: start;
   }
 
-  .scale-link {
-    margin-right: 8px;
-    text-decoration: none;
-    font-weight: 600;
+  .recipe-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .recipe-content h2 {
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .recipe-content section {
+    margin-bottom: 2rem;
+  }
+
+  .ingredients ul,
+  .notes ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .ingredients li,
+  .notes li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .ingredients li:last-child,
+  .notes li:last-child {
+    border-bottom: none;
+  }
+
+  .steps ol {
+    padding-left: 1.5rem;
+  }
+
+  .steps li {
+    padding: 0.75rem 0;
+    line-height: 1.6;
   }
 
   @media (max-width: 900px) {
     .layout {
       grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .recipe-header h1 {
+      font-size: 2rem;
+    }
+
+    .recipe-content {
+      padding: 1.5rem;
     }
   }
 </style>

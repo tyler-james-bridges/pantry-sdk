@@ -1,46 +1,173 @@
 ---
-import { getEmDashCollection } from "emdash";
-import { Image } from "emdash/ui";
 import Base from "../layouts/Base.astro";
+import RecipeCard from "../components/RecipeCard.astro";
 
-const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
-	orderBy: { published_at: "desc" },
-});
-Astro.cache.set(cacheHint);
+const sampleRecipes = [
+  {
+    id: "garlic-pasta",
+    title: "Creamy Garlic Pasta",
+    description: "Rich and creamy pasta with roasted garlic and herbs",
+    image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=300&fit=crop",
+    cookTime: "25 min",
+    difficulty: "Easy",
+    rating: 4.8
+  },
+  {
+    id: "quinoa-bowl",
+    title: "Mediterranean Quinoa Bowl",
+    description: "Healthy quinoa with fresh vegetables and feta cheese",
+    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop",
+    cookTime: "20 min",
+    difficulty: "Easy",
+    rating: 4.6
+  },
+  {
+    id: "chocolate-cookies",
+    title: "Chocolate Chip Cookies",
+    description: "Classic homemade cookies with melty chocolate chips",
+    image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop",
+    cookTime: "30 min",
+    difficulty: "Medium",
+    rating: 4.9
+  },
+  {
+    id: "grilled-salmon",
+    title: "Grilled Salmon",
+    description: "Perfectly grilled salmon with lemon and herbs",
+    image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=300&fit=crop",
+    cookTime: "15 min",
+    difficulty: "Medium",
+    rating: 4.7
+  },
+  {
+    id: "thai-curry",
+    title: "Thai Green Curry",
+    description: "Spicy and aromatic curry with fresh vegetables",
+    image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&h=300&fit=crop",
+    cookTime: "35 min",
+    difficulty: "Hard",
+    rating: 4.5
+  },
+  {
+    id: "caprese-salad",
+    title: "Fresh Caprese Salad",
+    description: "Simple salad with tomatoes, mozzarella, and basil",
+    image: "https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=400&h=300&fit=crop",
+    cookTime: "10 min",
+    difficulty: "Easy",
+    rating: 4.4
+  }
+];
 ---
 
-<Base title="My Site">
-	<h1>Recent Posts</h1>
+<Base title="Pantry - Recipe Collection">
+  <div class="container">
+    <header class="hero">
+      <h1>🍳 Pantry</h1>
+      <p>Discover delicious recipes for every occasion</p>
+      <div class="hero-actions">
+        <a href="/recipes" class="btn btn-primary">Browse Recipes</a>
+        <a href="/meal-planner" class="btn btn-secondary">Plan Meals</a>
+      </div>
+    </header>
 
-	{
-		posts.length === 0 ? (
-			<p>
-				No posts yet.{" "}
-				<a href="/_emdash/admin/content/posts/new">Create one</a>.
-			</p>
-		) : (
-			<ul>
-				{posts.map((post) => (
-					<li>
-						<a href={`/posts/${post.id}`}>
-							{post.data.featured_image && (
-								<Image image={post.data.featured_image} />
-							)}
-							<h2>{post.data.title}</h2>
-						</a>
-						{post.data.excerpt && <p>{post.data.excerpt}</p>}
-						{post.data.publishedAt && (
-							<time datetime={post.data.publishedAt.toISOString()}>
-								{post.data.publishedAt.toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-								})}
-							</time>
-						)}
-					</li>
-				))}
-			</ul>
-		)
-	}
+    <section class="featured-recipes">
+      <h2>Featured Recipes</h2>
+      <div class="recipe-grid">
+        {sampleRecipes.map(recipe => (
+          <RecipeCard {...recipe} />
+        ))}
+      </div>
+    </section>
+  </div>
 </Base>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 60px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 60px;
+  }
+
+  .hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: #ff6b6b;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .featured-recipes h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    color: #333;
+  }
+
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+    
+    .recipe-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+  }
+</style>

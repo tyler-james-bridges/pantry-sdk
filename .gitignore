@@ -9,3 +9,4 @@ data.db
 **/spec-*.md
 **/*-spec.md
 **/SPEC*.md
+.vercel

@@ -2,11 +2,13 @@
 interface Props {
   id: string;
   title: string;
-  servings: number;
-  tags?: string[];
+  description: string;
+  cookTime: string;
+  difficulty: string;
+  rating: number;
 }
 
-const { id, title, servings, tags = [] } = Astro.props;
+const { id, title, description, cookTime, difficulty, rating } = Astro.props;
 const seed = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
 const heights = [260, 320, 380, 440];
 const heroHeight = heights[seed % heights.length];
@@ -27,12 +29,12 @@ const heroBg = palettes[seed % palettes.length];
 
   <div class="recipe-card__content">
     <h3>{title}</h3>
-    <p>{servings} servings</p>
-    {tags.length > 0 && (
-      <div class="recipe-card__tags">
-        {tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
-      </div>
-    )}
+    <p class="description">{description}</p>
+    <div class="recipe-meta">
+      <span class="time">⏱️ {cookTime}</span>
+      <span class="difficulty">{difficulty}</span>
+      <span class="rating">⭐ {rating}</span>
+    </div>
   </div>
 </a>
 
@@ -110,25 +112,38 @@ const heroBg = palettes[seed % palettes.length];
     line-height: 1.3;
   }
 
-  .recipe-card p {
-    margin: 0;
+  .description {
+    margin: 0 0 10px;
     color: #6b5b4b;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+    line-height: 1.4;
   }
 
-  .recipe-card__tags {
-    margin-top: 10px;
+  .recipe-meta {
     display: flex;
-    gap: 6px;
+    gap: 12px;
     flex-wrap: wrap;
+    align-items: center;
   }
 
-  .recipe-card__tags span {
-    font-size: 0.72rem;
-    background: #fff6ea;
-    color: #8a4b08;
-    border: 1px solid #f2d7ba;
-    border-radius: 999px;
-    padding: 2px 8px;
+  .recipe-meta span {
+    font-size: 0.8rem;
+    color: #8a7968;
+  }
+
+  .time {
+    background: #f0f8f0;
+    padding: 3px 8px;
+    border-radius: 12px;
+  }
+
+  .difficulty {
+    background: #fff0e6;
+    padding: 3px 8px;
+    border-radius: 12px;
+  }
+
+  .rating {
+    font-weight: 600;
   }
 </style>

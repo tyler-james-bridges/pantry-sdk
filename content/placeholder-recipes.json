@@ -1,0 +1,108 @@
+[
+  {
+    "pantryId": "perfect-cc-cookies",
+    "title": "Perfect Chocolate Chip Cookies",
+    "slug": "perfect-chocolate-chip-cookies",
+    "servings": 8,
+    "tags": ["dessert", "crowd-favorite"],
+    "ingredients": [
+      { "name": "butter", "amount": 8, "unit": "tbsp" },
+      { "name": "sugar", "amount": 0.5, "unit": "cup" },
+      { "name": "dark brown sugar", "amount": 0.5, "unit": "cup" },
+      { "name": "egg", "amount": 1, "unit": "count" },
+      { "name": "vanilla", "amount": 1, "unit": "tsp" },
+      { "name": "kosher salt", "amount": 0.5, "unit": "tsp" },
+      { "name": "baking soda", "amount": 0.5, "unit": "tsp" },
+      { "name": "ap flour", "amount": 1.333, "unit": "cup" },
+      { "name": "chocolate chips", "amount": 1, "unit": "cup" }
+    ],
+    "steps": [
+      "Brown the butter and cool slightly.",
+      "Whisk in sugars until glossy.",
+      "Mix in egg and vanilla.",
+      "Fold in dry ingredients and chips.",
+      "Bake at 350°F for 10-12 minutes."
+    ],
+    "notes": ["Chill dough 10-30 min for better texture"]
+  },
+  {
+    "pantryId": "banana-bread",
+    "title": "Banana Bread",
+    "slug": "banana-bread",
+    "servings": 8,
+    "tags": ["bake", "breakfast"],
+    "ingredients": [
+      { "name": "banana", "amount": 3, "unit": "count" },
+      { "name": "flour", "amount": 2, "unit": "cup" },
+      { "name": "sugar", "amount": 0.75, "unit": "cup" },
+      { "name": "egg", "amount": 2, "unit": "count" },
+      { "name": "butter", "amount": 0.5, "unit": "cup" }
+    ],
+    "steps": [
+      "Mash bananas.",
+      "Mix wet ingredients.",
+      "Fold in flour.",
+      "Bake at 350°F for 50-60 min."
+    ]
+  },
+  {
+    "pantryId": "sheet-pan-lemon-chicken",
+    "title": "Sheet Pan Lemon Chicken",
+    "slug": "sheet-pan-lemon-chicken",
+    "servings": 4,
+    "tags": ["dinner", "high-protein", "easy"],
+    "ingredients": [
+      { "name": "chicken thighs", "amount": 1.5, "unit": "lb" },
+      { "name": "baby potatoes", "amount": 1, "unit": "lb" },
+      { "name": "broccoli", "amount": 1, "unit": "head" },
+      { "name": "olive oil", "amount": 3, "unit": "tbsp" },
+      { "name": "lemon", "amount": 1, "unit": "count" },
+      { "name": "garlic", "amount": 3, "unit": "clove" }
+    ],
+    "steps": [
+      "Toss potatoes with oil and roast 15 min.",
+      "Add seasoned chicken and roast 20 min.",
+      "Add broccoli, roast 10 min.",
+      "Finish with lemon juice."
+    ]
+  },
+  {
+    "pantryId": "tofu-stir-fry",
+    "title": "Weeknight Tofu Stir Fry",
+    "slug": "weeknight-tofu-stir-fry",
+    "servings": 3,
+    "tags": ["vegan", "quick", "dinner"],
+    "ingredients": [
+      { "name": "firm tofu", "amount": 14, "unit": "oz" },
+      { "name": "rice", "amount": 1, "unit": "cup" },
+      { "name": "mixed vegetables", "amount": 3, "unit": "cup" },
+      { "name": "soy sauce", "amount": 3, "unit": "tbsp" },
+      { "name": "sesame oil", "amount": 1, "unit": "tbsp" }
+    ],
+    "steps": [
+      "Press and cube tofu.",
+      "Pan-sear tofu until crisp.",
+      "Stir-fry vegetables.",
+      "Add sauce and serve over rice."
+    ]
+  },
+  {
+    "pantryId": "overnight-oats-protein",
+    "title": "Protein Overnight Oats",
+    "slug": "protein-overnight-oats",
+    "servings": 1,
+    "tags": ["breakfast", "high-protein", "meal-prep"],
+    "ingredients": [
+      { "name": "rolled oats", "amount": 0.5, "unit": "cup" },
+      { "name": "milk", "amount": 0.75, "unit": "cup" },
+      { "name": "chia seeds", "amount": 1, "unit": "tbsp" },
+      { "name": "protein powder", "amount": 1, "unit": "scoop" },
+      { "name": "berries", "amount": 0.5, "unit": "cup" }
+    ],
+    "steps": [
+      "Mix all ingredients in jar.",
+      "Refrigerate overnight.",
+      "Top with berries before serving."
+    ]
+  }
+]
