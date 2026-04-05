@@ -1,3 +1,4 @@
 import handler from "@astrojs/cloudflare/entrypoints/server";
-export { PluginBridge } from "@emdash-cms/cloudflare/sandbox";
+// EmDash temporarily disabled for deployment
+// export { PluginBridge } from "@emdash-cms/cloudflare/sandbox";
 export default handler;

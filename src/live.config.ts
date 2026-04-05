@@ -1,6 +1,7 @@
-import { defineLiveCollection } from "astro:content";
-import { emdashLoader } from "emdash/runtime";
+// EmDash temporarily disabled for deployment
+// import { defineLiveCollection } from "astro:content";
+// import { emdashLoader } from "emdash/runtime";
 
 export const collections = {
-	_emdash: defineLiveCollection({ loader: emdashLoader() }),
+	// _emdash: defineLiveCollection({ loader: emdashLoader() }),
 };
