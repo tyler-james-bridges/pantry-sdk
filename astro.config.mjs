@@ -14,20 +14,13 @@ let config = {
 };
 
 if (isCloudflare) {
-	// Cloudflare deployment with EmDash
+	// Basic Cloudflare deployment without EmDash for now
 	const cloudflare = await import("@astrojs/cloudflare");
-	const emdash = await import("emdash/astro");
-	const { d1, r2, sandbox } = await import("@emdash-cms/cloudflare");
 	
 	config.output = "server";
-	config.adapter = cloudflare.default();
-	config.integrations.push(
-		emdash.default({
-			database: d1({ binding: "pantry_sdk_db", session: false }),
-			storage: r2({ binding: "MEDIA" }),
-			sandboxRunner: sandbox(),
-		})
-	);
+	config.adapter = cloudflare.default({
+		mode: "directory",
+	});
 } else {
 	// Static build for Vercel/other platforms
 	config.output = "static";
