@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "my-emdash-site",
+	"name": "pantry-sdk",
 	"main": "./src/worker.ts",
 	"compatibility_date": "2026-03-29",
 	"compatibility_flags": [
@@ -9,7 +9,7 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "my-emdash-site",
+			"database_name": "pantry-sdk-emdash",
 			// Run `wrangler d1 create my-emdash-site` and paste the ID here
 		},
 		{
@@ -19,10 +19,17 @@
 			"remote": true
 		},
 	],
+	"kv_namespaces": [
+		{
+			"binding": "SESSION",
+			"id": "",
+			"preview_id": ""
+		}
+	],
 	"r2_buckets": [
 		{
 			"binding": "MEDIA",
-			"bucket_name": "my-emdash-media",
+			"bucket_name": "pantry-sdk-media",
 		},
 	],
 	"observability": {
