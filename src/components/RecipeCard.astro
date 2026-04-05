@@ -2,14 +2,14 @@
 interface Props {
   id: string;
   title: string;
-  description: string;
-  cookTime: string;
-  difficulty: string;
+  description?: string;
+  cookTime?: string;
+  difficulty?: string;
   rating?: number;
   servings?: number;
 }
 
-const { id, title, description, cookTime, difficulty, rating, servings } = Astro.props;
+const { id, title, description = '', cookTime = '30 min', difficulty = 'Medium', rating, servings } = Astro.props;
 const seed = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
 const heights = [260, 320, 380, 440];
 const heroHeight = heights[seed % heights.length];
