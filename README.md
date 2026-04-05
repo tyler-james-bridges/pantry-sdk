@@ -52,3 +52,4 @@ Or click the deploy button above to set up the project in your Cloudflare accoun
 - [Node.js variant](../starter) -- same template using SQLite and local file storage
 - [All templates](../)
 - [EmDash documentation](https://github.com/emdash-cms/emdash/tree/main/docs)
+# Cloudflare Workers Paid Plan - EmDash Ready
