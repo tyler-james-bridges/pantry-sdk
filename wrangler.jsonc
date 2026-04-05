@@ -12,6 +12,12 @@
 			"database_name": "my-emdash-site",
 			// Run `wrangler d1 create my-emdash-site` and paste the ID here
 		},
+		{
+			"binding": "pantry_sdk_db",
+			"database_name": "pantry-sdk-db",
+			"database_id": "f7805f4c-ff83-4f34-9d1b-af9911161f1b",
+			"remote": true
+		},
 	],
 	"r2_buckets": [
 		{

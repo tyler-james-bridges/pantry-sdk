@@ -5,10 +5,11 @@ interface Props {
   description: string;
   cookTime: string;
   difficulty: string;
-  rating: number;
+  rating?: number;
+  servings?: number;
 }
 
-const { id, title, description, cookTime, difficulty, rating } = Astro.props;
+const { id, title, description, cookTime, difficulty, rating, servings } = Astro.props;
 const seed = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
 const heights = [260, 320, 380, 440];
 const heroHeight = heights[seed % heights.length];
@@ -33,7 +34,8 @@ const heroBg = palettes[seed % palettes.length];
     <div class="recipe-meta">
       <span class="time">⏱️ {cookTime}</span>
       <span class="difficulty">{difficulty}</span>
-      <span class="rating">⭐ {rating}</span>
+      {rating && <span class="rating">⭐ {rating}</span>}
+      {servings && <span class="servings">{servings} servings</span>}
     </div>
   </div>
 </a>

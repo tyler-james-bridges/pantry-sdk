@@ -1,0 +1,18 @@
+# Pantry SDK - EmDash CMS + Cloudflare
+name = "pantry-sdk"
+compatibility_date = "2024-01-01"
+
+[env.production]
+name = "pantry-sdk-prod"
+
+[[d1_databases]]
+binding = "pantry_sdk_db"
+database_name = "pantry-sdk-db"
+database_id = "f7805f4c-ff83-4f34-9d1b-af9911161f1b"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "pantry-sdk-media"
+
+[env.production.vars]
+# Production environment variables

@@ -2,7 +2,7 @@ import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
 
 // Use different configs based on deployment target
-const isCloudflare = process.env.CF_PAGES || process.env.CLOUDFLARE_API_TOKEN;
+const isCloudflare = process.env.CF_PAGES || process.env.CLOUDFLARE_API_TOKEN || process.env.CLOUDFLARE;
 
 let config = {
 	integrations: [react()],
@@ -23,7 +23,7 @@ if (isCloudflare) {
 	config.adapter = cloudflare.default();
 	config.integrations.push(
 		emdash.default({
-			database: d1({ binding: "DB", session: "auto" }),
+			database: d1({ binding: "pantry_sdk_db", session: "auto" }),
 			storage: r2({ binding: "MEDIA" }),
 			sandboxRunner: sandbox(),
 		})
