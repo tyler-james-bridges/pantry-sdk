@@ -116,6 +116,7 @@ Create `.env` in this folder:
 ```env
 X402_NETWORK=base-sepolia
 X402_PAY_TO=0x3b899D6Ec64B654B3385E50Fa8f238066e1da0C7
+BOT_ONLY_MODE=true
 ```
 
 ### 2) Restart server
@@ -167,6 +168,8 @@ This uses `@x402/fetch` + `@x402/evm` and will:
 - `POST /batch-prep`
 
 If `X402_PAY_TO` is missing, app runs in free mode.
+
+If `BOT_ONLY_MODE=true`, likely bot/agent user-agents are challenged with x402 while human browsers pass through.
 
 ## Next step
 Drop your custom recipe into `recipes.json` and re-run calls.

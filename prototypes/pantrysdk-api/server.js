@@ -16,64 +16,79 @@ app.use(express.json());
 const recipes = JSON.parse(fs.readFileSync(path.join(__dirname, 'recipes.json'), 'utf8'));
 
 const x402Enabled = Boolean(paymentMiddleware && process.env.X402_PAY_TO);
+const botOnlyMode = String(process.env.BOT_ONLY_MODE || 'false').toLowerCase() === 'true';
+
+function isLikelyBotRequest(req) {
+  const ua = String(req.headers['user-agent'] || '').toLowerCase();
+  const botHints = [
+    'bot', 'crawler', 'spider', 'gpt', 'openai', 'claude', 'anthropic',
+    'perplexity', 'bytespider', 'facebookexternalhit', 'slurp', 'bingpreview'
+  ];
+  return botHints.some(h => ua.includes(h));
+}
+
 if (x402Enabled) {
-  app.use(
-    paymentMiddleware({
-      network: process.env.X402_NETWORK || 'base-sepolia',
-      payTo: process.env.X402_PAY_TO,
-      resources: [
-        {
-          path: '/shopping-list',
-          method: 'POST',
-          price: '$0.01',
-          name: 'PantrySDK Shopping List',
-          description: 'Aggregate ingredients across selected recipes'
-        },
-        {
-          path: '/substitute',
-          method: 'POST',
-          price: '$0.01',
-          name: 'PantrySDK Substitute',
-          description: 'Ingredient substitutions with profile-aware options'
-        },
-        {
-          path: '/plan-meal',
-          method: 'POST',
-          price: '$0.03',
-          name: 'PantrySDK Meal Planner',
-          description: 'Build meal plan + combined shopping list'
-        },
-        {
-          path: '/recipe/:id/transform',
-          method: 'POST',
-          price: '$0.02',
-          name: 'PantrySDK Recipe Transform',
-          description: 'Transform recipe for dietary profile and constraints'
-        },
-        {
-          path: '/pantry-match',
-          method: 'POST',
-          price: '$0.02',
-          name: 'PantrySDK Pantry Match',
-          description: 'Match pantry ingredients to best recipes'
-        },
-        {
-          path: '/leftovers-remix',
-          method: 'POST',
-          price: '$0.02',
-          name: 'PantrySDK Leftovers Remix',
-          description: 'Remix leftovers into recommended meal ideas'
-        },
-        {
-          path: '/batch-prep',
-          method: 'POST',
-          price: '$0.04',
-          name: 'PantrySDK Batch Prep',
-          description: 'Generate batch-prep schedule and prep blocks'
-        }
-      ]
-    })
-  );
+  const x402Gate = paymentMiddleware({
+    network: process.env.X402_NETWORK || 'base-sepolia',
+    payTo: process.env.X402_PAY_TO,
+    resources: [
+      {
+        path: '/shopping-list',
+        method: 'POST',
+        price: '$0.01',
+        name: 'PantrySDK Shopping List',
+        description: 'Aggregate ingredients across selected recipes'
+      },
+      {
+        path: '/substitute',
+        method: 'POST',
+        price: '$0.01',
+        name: 'PantrySDK Substitute',
+        description: 'Ingredient substitutions with profile-aware options'
+      },
+      {
+        path: '/plan-meal',
+        method: 'POST',
+        price: '$0.03',
+        name: 'PantrySDK Meal Planner',
+        description: 'Build meal plan + combined shopping list'
+      },
+      {
+        path: '/recipe/:id/transform',
+        method: 'POST',
+        price: '$0.02',
+        name: 'PantrySDK Recipe Transform',
+        description: 'Transform recipe for dietary profile and constraints'
+      },
+      {
+        path: '/pantry-match',
+        method: 'POST',
+        price: '$0.02',
+        name: 'PantrySDK Pantry Match',
+        description: 'Match pantry ingredients to best recipes'
+      },
+      {
+        path: '/leftovers-remix',
+        method: 'POST',
+        price: '$0.02',
+        name: 'PantrySDK Leftovers Remix',
+        description: 'Remix leftovers into recommended meal ideas'
+      },
+      {
+        path: '/batch-prep',
+        method: 'POST',
+        price: '$0.04',
+        name: 'PantrySDK Batch Prep',
+        description: 'Generate batch-prep schedule and prep blocks'
+      }
+    ]
+  });
+
+  app.use((req, res, next) => {
+    if (!botOnlyMode) return x402Gate(req, res, next);
+    if (isLikelyBotRequest(req)) return x402Gate(req, res, next);
+    return next();
+  });
 }
 
 app.get('/', (_req, res) => {
@@ -82,7 +97,8 @@ app.get('/', (_req, res) => {
     status: 'ok',
     x402: {
       enabled: x402Enabled,
-      network: process.env.X402_NETWORK || 'base-sepolia'
+      network: process.env.X402_NETWORK || 'base-sepolia',
+      botOnlyMode
     },
     endpoints: [
       'GET /recipes',
