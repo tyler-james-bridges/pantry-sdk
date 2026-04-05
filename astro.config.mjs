@@ -23,7 +23,7 @@ if (isCloudflare) {
 	config.adapter = cloudflare.default();
 	config.integrations.push(
 		emdash.default({
-			database: d1({ binding: "pantry_sdk_db", session: "auto" }),
+			database: d1({ binding: "pantry_sdk_db", session: false }),
 			storage: r2({ binding: "MEDIA" }),
 			sandboxRunner: sandbox(),
 		})
