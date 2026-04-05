@@ -14,12 +14,14 @@ let config = {
 };
 
 if (isCloudflare) {
-	// Basic Cloudflare deployment without EmDash for now
+	// Basic Cloudflare deployment - DISABLE ALL AUTO-BINDINGS
 	const cloudflare = await import("@astrojs/cloudflare");
 	
 	config.output = "server";
 	config.adapter = cloudflare.default({
 		mode: "directory",
+		// DISABLE IMAGE PROCESSING TO PREVENT KV SESSION
+		imageService: "no-op"
 	});
 } else {
 	// Static build for Vercel/other platforms
