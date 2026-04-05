@@ -1,16 +1,19 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "pantry-sdk-2026-04-05",
+	"name": "pantry-sdk",
 	"main": "./src/worker.ts",
 	"compatibility_date": "2026-03-29",
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
-	// Temporarily remove all resource bindings to avoid provisioning conflicts
-	// "d1_databases": [],
-	// "r2_buckets": [],
+	"kv_namespaces": [
+		{
+			"binding": "SESSION",
+			"id": "a3d453c4400642e8bd023c7b16fc6f9c",
+			"preview_id": "a3d453c4400642e8bd023c7b16fc6f9c"
+		}
+	],
 	"observability": {
 		"enabled": true
 	}
-	// "worker_loaders": []
 }
