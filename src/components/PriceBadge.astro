@@ -1,0 +1,26 @@
+---
+interface Props {
+  price?: string;
+  label?: string;
+}
+
+const { price = '$0.03', label = 'Premium' } = Astro.props;
+---
+
+<span class="price-badge">✦ {label} {price}</span>
+
+<style>
+  .price-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: #111827;
+    color: #fff;
+    border-radius: 999px;
+    padding: 4px 10px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+</style>

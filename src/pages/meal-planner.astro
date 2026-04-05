@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import { listRecipes, planMeal } from "../lib/pantry-client";
+import PriceBadge from "../components/PriceBadge.astro";
 
 const { recipes } = await listRecipes();
 
@@ -19,34 +20,40 @@ if (selected.length > 0) {
 ---
 
 <Base title="Meal Planner | PantrySDK">
-  <h1>Meal Planner</h1>
-  <p>Select recipes + servings to generate a combined shopping list.</p>
+  <section class="header">
+    <h1>Meal Planner</h1>
+    <p>Build a weekly plan and auto-generate a shopping list.</p>
+    <PriceBadge price="$0.03" label="Generate Plan" />
+  </section>
 
-  <form method="GET">
-    <ul>
+  <form method="GET" class="planner-form">
+    <section class="cards">
       {recipes.map((r) => (
-        <li>
-          <label>
+        <label class={`recipe-option ${selected.includes(r.id) ? 'selected' : ''}`}>
+          <div class="thumb"></div>
+          <div class="meta">
             <input type="checkbox" name="r" value={r.id} checked={selected.includes(r.id)} />
-            {' '}{r.name}
-          </label>
-          {' '}
-          <input
-            type="number"
-            min="1"
-            name={`s_${r.id}`}
-            value={servingsMap[r.id]}
-            style="width:70px;"
-          />
-          {' '}servings
-        </li>
+            <strong>{r.name}</strong>
+            <span>{r.servings} default servings</span>
+          </div>
+          <div class="servings">
+            <span>Servings</span>
+            <input
+              type="number"
+              min="1"
+              name={`s_${r.id}`}
+              value={servingsMap[r.id]}
+            />
+          </div>
+        </label>
       ))}
-    </ul>
-    <button type="submit">Generate Meal Plan</button>
+    </section>
+
+    <button type="submit" class="submit-btn">Generate Meal Plan</button>
   </form>
 
   {result && (
-    <>
+    <section class="result">
       <h2>Plan</h2>
       <ul>
         {result.mealPlan.map((m) => (
@@ -60,6 +67,80 @@ if (selected.length > 0) {
           <li><strong>{i.amount} {i.unit}</strong> {i.name}</li>
         ))}
       </ul>
-    </>
+    </section>
   )}
 </Base>
+
+<style>
+  :global(body) { background: #f6f1ea; }
+
+  .header { margin-bottom: 14px; }
+  .header h1 { margin: 0 0 6px; }
+  .header p { margin: 0 0 10px; color: #5b4b3b; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .recipe-option {
+    border: 1px solid #e8dccd;
+    border-radius: 14px;
+    background: #fff;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .recipe-option.selected {
+    border-color: #d97706;
+    box-shadow: 0 0 0 2px rgba(217,119,6,0.15);
+  }
+
+  .thumb {
+    height: 120px;
+    background: linear-gradient(135deg, #f8ddc2, #ebb082);
+  }
+
+  .meta {
+    padding: 10px;
+    display: grid;
+    gap: 4px;
+  }
+
+  .meta span { font-size: 0.83rem; color: #6b5b4b; }
+
+  .servings {
+    border-top: 1px solid #f0e7db;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .servings input {
+    width: 72px;
+    border: 1px solid #e8dccd;
+    border-radius: 8px;
+    padding: 6px;
+  }
+
+  .submit-btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: #111827;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .result {
+    margin-top: 16px;
+    background: #fff;
+    border: 1px solid #e8dccd;
+    border-radius: 14px;
+    padding: 14px;
+  }
+</style>
