@@ -7,9 +7,17 @@ interface Props {
 }
 
 const { id, title, servings, tags = [] } = Astro.props;
+const seed = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+const heights = [220, 280, 340];
+const heroHeight = heights[seed % heights.length];
 ---
 
 <a class="recipe-card" href={`/recipes/${id}`}>
+  <div class="recipe-card__hero" style={`height:${heroHeight}px`}>
+    <button class="save-btn" type="button" aria-label="Save recipe">♡</button>
+    <div class="hero-label">{title.split(' ').slice(0, 2).join(' ')}</div>
+  </div>
+
   <div class="recipe-card__content">
     <h3>{title}</h3>
     <p>{servings} servings</p>
@@ -18,50 +26,110 @@ const { id, title, servings, tags = [] } = Astro.props;
         {tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
       </div>
     )}
+    <div class="actions">
+      <span>View</span>
+      <span>Plan</span>
+      <span>Shop</span>
+    </div>
   </div>
 </a>
 
 <style>
   .recipe-card {
-    display: block;
+    display: inline-block;
+    width: 100%;
     text-decoration: none;
     color: inherit;
-    border: 1px solid #e9e9ec;
-    border-radius: 14px;
-    padding: 16px;
+    border: 1px solid #eee8df;
+    border-radius: 18px;
     background: #fff;
-    transition: transform 120ms ease, box-shadow 120ms ease;
+    overflow: hidden;
+    margin-bottom: 14px;
+    transition: transform 140ms ease, box-shadow 140ms ease;
+    break-inside: avoid;
   }
 
   .recipe-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(30, 23, 12, 0.12);
+  }
+
+  .recipe-card__hero {
+    background: linear-gradient(135deg, #fde8d3 0%, #ffd6ad 45%, #ffb981 100%);
+    position: relative;
+    display: flex;
+    align-items: end;
+    padding: 12px;
+  }
+
+  .hero-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #9a3412;
+    background: rgba(255,255,255,0.8);
+    border-radius: 999px;
+    padding: 4px 8px;
+  }
+
+  .save-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: 0;
+    background: rgba(255,255,255,0.9);
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    font-size: 1rem;
+    color: #7c2d12;
+    cursor: pointer;
+  }
+
+  .recipe-card__content {
+    padding: 12px;
   }
 
   .recipe-card h3 {
     margin: 0 0 6px;
-    font-size: 1.05rem;
+    font-size: 1.02rem;
+    line-height: 1.25;
   }
 
   .recipe-card p {
     margin: 0;
-    color: #556;
-    font-size: 0.95rem;
+    color: #6b5b4b;
+    font-size: 0.92rem;
   }
 
   .recipe-card__tags {
-    margin-top: 12px;
+    margin-top: 10px;
     display: flex;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
   }
 
   .recipe-card__tags span {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     background: #fff4e8;
     color: #8a4b08;
     border: 1px solid #ffd8b0;
     border-radius: 999px;
     padding: 2px 8px;
+  }
+
+  .actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    font-size: 0.72rem;
+    color: #5f4a38;
+  }
+
+  .actions span {
+    border: 1px solid #ece0d2;
+    border-radius: 999px;
+    padding: 2px 8px;
+    background: #fffaf5;
   }
 </style>

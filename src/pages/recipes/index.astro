@@ -8,12 +8,17 @@ const { recipes } = await listRecipes();
 
 <Base title="Recipes | PantrySDK">
   <section class="header">
-    <h1>Recipes</h1>
-    <p>Free content for humans, programmable utilities for agents.</p>
-    <a class="planner-link" href="/meal-planner">Open Meal Planner →</a>
+    <h1>Discover Recipes</h1>
+    <p>Scroll, save, and turn content into actionable meal planning.</p>
+    <div class="row">
+      <a class="planner-link" href="/meal-planner">Open Meal Planner →</a>
+      <div class="chips">
+        <span>Dessert</span><span>Dinner</span><span>High Protein</span><span>Quick</span>
+      </div>
+    </div>
   </section>
 
-  <section class="grid">
+  <section class="masonry">
     {recipes.map((r) => (
       <RecipeCard id={r.id} title={r.name} servings={r.servings} />
     ))}
@@ -21,28 +26,67 @@ const { recipes } = await listRecipes();
 </Base>
 
 <style>
+  :global(body) {
+    background: #faf7f2;
+  }
+
   .header {
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
 
   .header h1 {
     margin: 0 0 6px;
+    font-size: 2rem;
   }
 
   .header p {
     margin: 0 0 10px;
-    color: #4b5563;
+    color: #5b4b3b;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .planner-link {
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
     color: #9a3412;
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
+  .chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chips span {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid #ecdcc7;
+    background: #fff;
+    color: #6b4e33;
+  }
+
+  .masonry {
+    column-count: 1;
+    column-gap: 14px;
+  }
+
+  @media (min-width: 700px) {
+    .masonry { column-count: 2; }
+  }
+
+  @media (min-width: 980px) {
+    .masonry { column-count: 3; }
+  }
+
+  @media (min-width: 1280px) {
+    .masonry { column-count: 4; }
   }
 </style>
