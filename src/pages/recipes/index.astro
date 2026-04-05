@@ -1,21 +1,48 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { listRecipes } from "../../lib/pantry-client";
+import RecipeCard from "../../components/RecipeCard.astro";
 
 const { recipes } = await listRecipes();
 ---
 
 <Base title="Recipes | PantrySDK">
-  <h1>Recipes</h1>
-  <p>Powered by PantrySDK utilities + EmDash pages.</p>
+  <section class="header">
+    <h1>Recipes</h1>
+    <p>Free content for humans, programmable utilities for agents.</p>
+    <a class="planner-link" href="/meal-planner">Open Meal Planner →</a>
+  </section>
 
-  <ul>
+  <section class="grid">
     {recipes.map((r) => (
-      <li>
-        <a href={`/recipes/${r.id}`}>{r.name}</a> — {r.servings} servings
-      </li>
+      <RecipeCard id={r.id} title={r.name} servings={r.servings} />
     ))}
-  </ul>
-
-  <p><a href="/meal-planner">Go to Meal Planner →</a></p>
+  </section>
 </Base>
+
+<style>
+  .header {
+    margin-bottom: 18px;
+  }
+
+  .header h1 {
+    margin: 0 0 6px;
+  }
+
+  .header p {
+    margin: 0 0 10px;
+    color: #4b5563;
+  }
+
+  .planner-link {
+    text-decoration: none;
+    font-weight: 600;
+    color: #9a3412;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { getRecipe, scaleRecipe } from "../../lib/pantry-client";
+import StickyUtilityPanel from "../../components/StickyUtilityPanel.astro";
 
 const { slug } = Astro.params;
 if (!slug) throw new Error("Missing slug");
@@ -17,38 +18,70 @@ const options = [Math.max(1, Math.floor(recipe.servings / 2)), recipe.servings, 
   <p><a href="/recipes">← Back to recipes</a></p>
   <h1>{recipe.name}</h1>
 
-  <p>
-    Servings: <strong>{scaled.targetServings}</strong>
-    {' '}| Factor: <strong>×{scaled.factor}</strong>
-  </p>
+  <section class="layout">
+    <article>
+      <p>
+        Servings: <strong>{scaled.targetServings}</strong>
+        {' '}| Factor: <strong>×{scaled.factor}</strong>
+      </p>
 
-  <p>
-    Scale to:
-    {options.map((n) => (
-      <a href={`?servings=${n}`} style="margin-right:8px;">{n}</a>
-    ))}
-  </p>
+      <p>
+        Scale to:
+        {options.map((n) => (
+          <a class="scale-link" href={`?servings=${n}`}>{n}</a>
+        ))}
+      </p>
 
-  <h2>Ingredients</h2>
-  <ul>
-    {scaled.ingredients.map((i) => (
-      <li><strong>{i.amount} {i.unit}</strong> {i.name}</li>
-    ))}
-  </ul>
+      <h2>Ingredients</h2>
+      <ul>
+        {scaled.ingredients.map((i) => (
+          <li><strong>{i.amount} {i.unit}</strong> {i.name}</li>
+        ))}
+      </ul>
 
-  {recipe.notes && recipe.notes.length > 0 && (
-    <>
-      <h2>Notes</h2>
-      <ul>{recipe.notes.map((n) => <li>{n}</li>)}</ul>
-    </>
-  )}
+      {recipe.notes && recipe.notes.length > 0 && (
+        <>
+          <h2>Notes</h2>
+          <ul>{recipe.notes.map((n) => <li>{n}</li>)}</ul>
+        </>
+      )}
 
-  {recipe.steps && recipe.steps.length > 0 && (
-    <>
-      <h2>Steps</h2>
-      <ol>{recipe.steps.map((s) => <li>{s}</li>)}</ol>
-    </>
-  )}
+      {recipe.steps && recipe.steps.length > 0 && (
+        <>
+          <h2>Steps</h2>
+          <ol>{recipe.steps.map((s) => <li>{s}</li>)}</ol>
+        </>
+      )}
+    </article>
 
-  <p><a href="/meal-planner">Add this to meal planner →</a></p>
+    <StickyUtilityPanel
+      title="Pantry Utilities"
+      actions={[
+        { label: 'Generate meal plan', href: '/meal-planner', premium: true, price: '$0.03' },
+        { label: 'Substitute ingredient', premium: true, price: '$0.01' },
+        { label: 'Scale servings', premium: false }
+      ]}
+    />
+  </section>
 </Base>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .scale-link {
+    margin-right: 8px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

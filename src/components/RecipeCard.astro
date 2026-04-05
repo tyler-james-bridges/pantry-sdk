@@ -1,0 +1,67 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  servings: number;
+  tags?: string[];
+}
+
+const { id, title, servings, tags = [] } = Astro.props;
+---
+
+<a class="recipe-card" href={`/recipes/${id}`}>
+  <div class="recipe-card__content">
+    <h3>{title}</h3>
+    <p>{servings} servings</p>
+    {tags.length > 0 && (
+      <div class="recipe-card__tags">
+        {tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
+      </div>
+    )}
+  </div>
+</a>
+
+<style>
+  .recipe-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #e9e9ec;
+    border-radius: 14px;
+    padding: 16px;
+    background: #fff;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+
+  .recipe-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  }
+
+  .recipe-card h3 {
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+  }
+
+  .recipe-card p {
+    margin: 0;
+    color: #556;
+    font-size: 0.95rem;
+  }
+
+  .recipe-card__tags {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .recipe-card__tags span {
+    font-size: 0.75rem;
+    background: #fff4e8;
+    color: #8a4b08;
+    border: 1px solid #ffd8b0;
+    border-radius: 999px;
+    padding: 2px 8px;
+  }
+</style>

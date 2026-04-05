@@ -1,0 +1,74 @@
+---
+interface UtilityAction {
+  label: string;
+  href?: string;
+  price?: string;
+  premium?: boolean;
+}
+
+interface Props {
+  title?: string;
+  actions: UtilityAction[];
+}
+
+const { title = 'Utilities', actions } = Astro.props;
+---
+
+<aside class="utility-panel">
+  <h3>{title}</h3>
+  <ul>
+    {actions.map((a) => (
+      <li>
+        {a.href ? <a href={a.href}>{a.label}</a> : <span>{a.label}</span>}
+        {a.premium && <em>{a.price || 'Paid'}</em>}
+      </li>
+    ))}
+  </ul>
+</aside>
+
+<style>
+  .utility-panel {
+    position: sticky;
+    top: 1rem;
+    border: 1px solid #ececf1;
+    border-radius: 14px;
+    padding: 14px;
+    background: #fcfcfd;
+  }
+
+  .utility-panel h3 {
+    margin: 0 0 10px;
+    font-size: 1rem;
+  }
+
+  .utility-panel ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  .utility-panel li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .utility-panel a {
+    text-decoration: none;
+    color: #111827;
+    font-weight: 500;
+  }
+
+  .utility-panel em {
+    font-style: normal;
+    font-size: 0.72rem;
+    background: #111827;
+    color: #fff;
+    border-radius: 999px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+</style>
