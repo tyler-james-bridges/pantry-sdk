@@ -8,13 +8,16 @@ const { recipes } = await listRecipes();
 
 <Base title="Recipes | PantrySDK">
   <section class="header">
-    <h1>Discover Recipes</h1>
-    <p>Scroll, save, and turn content into actionable meal planning.</p>
-    <div class="row">
-      <a class="planner-link" href="/meal-planner">Open Meal Planner →</a>
-      <div class="chips">
-        <span>Dessert</span><span>Dinner</span><span>High Protein</span><span>Quick</span>
-      </div>
+    <h1>Cookie Feed</h1>
+    <p>Pin-inspired recipe discovery with built-in planning utilities.</p>
+
+    <div class="search-row">
+      <input type="text" value="chocolate chip cookies" readonly />
+      <a class="planner-link" href="/meal-planner">Plan meals</a>
+    </div>
+
+    <div class="chips">
+      <span>Cookies</span><span>Brown Butter</span><span>Soft + Chewy</span><span>Holiday</span><span>Beginner</span>
     </div>
   </section>
 
@@ -27,35 +30,47 @@ const { recipes } = await listRecipes();
 
 <style>
   :global(body) {
-    background: #faf7f2;
+    background: #f6f1ea;
   }
 
   .header {
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
 
   .header h1 {
     margin: 0 0 6px;
-    font-size: 2rem;
+    font-size: 2.2rem;
+    letter-spacing: -0.02em;
   }
 
   .header p {
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     color: #5b4b3b;
   }
 
-  .row {
+  .search-row {
     display: flex;
+    gap: 10px;
     align-items: center;
-    gap: 12px;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .search-row input {
+    border: 1px solid #e4d4c2;
+    background: #fff;
+    border-radius: 999px;
+    padding: 11px 14px;
+    min-width: 280px;
+    color: #6b5b4b;
   }
 
   .planner-link {
     text-decoration: none;
     font-weight: 700;
-    color: #9a3412;
+    color: #fff;
+    background: #111827;
+    border-radius: 999px;
+    padding: 10px 14px;
   }
 
   .chips {
@@ -66,27 +81,23 @@ const { recipes } = await listRecipes();
 
   .chips span {
     font-size: 0.75rem;
-    padding: 4px 10px;
+    padding: 5px 11px;
     border-radius: 999px;
-    border: 1px solid #ecdcc7;
-    background: #fff;
+    border: 1px solid #e7d8c7;
+    background: #fffaf5;
     color: #6b4e33;
   }
 
   .masonry {
     column-count: 1;
-    column-gap: 14px;
+    column-gap: 16px;
   }
 
-  @media (min-width: 700px) {
+  @media (min-width: 720px) {
     .masonry { column-count: 2; }
   }
 
-  @media (min-width: 980px) {
-    .masonry { column-count: 3; }
-  }
-
-  @media (min-width: 1280px) {
+  @media (min-width: 1024px) {
     .masonry { column-count: 4; }
   }
 </style>

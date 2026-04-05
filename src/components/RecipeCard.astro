@@ -8,14 +8,21 @@ interface Props {
 
 const { id, title, servings, tags = [] } = Astro.props;
 const seed = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-const heights = [220, 280, 340];
+const heights = [260, 320, 380, 440];
 const heroHeight = heights[seed % heights.length];
+const palettes = [
+  'linear-gradient(150deg, #f7e5cf 0%, #f9cfa5 45%, #e8a46c 100%)',
+  'linear-gradient(150deg, #f9ead9 0%, #f4c4a8 45%, #cf8862 100%)',
+  'linear-gradient(150deg, #fff2e2 0%, #f9d2bb 45%, #d49373 100%)'
+];
+const heroBg = palettes[seed % palettes.length];
 ---
 
 <a class="recipe-card" href={`/recipes/${id}`}>
-  <div class="recipe-card__hero" style={`height:${heroHeight}px`}>
-    <button class="save-btn" type="button" aria-label="Save recipe">♡</button>
-    <div class="hero-label">{title.split(' ').slice(0, 2).join(' ')}</div>
+  <div class="recipe-card__hero" style={`height:${heroHeight}px; background:${heroBg}`}>
+    <button class="save-btn" type="button" aria-label="Save recipe">Save</button>
+    <div class="overlay"></div>
+    <div class="hero-label">{title.split(' ').slice(0, 3).join(' ')}</div>
   </div>
 
   <div class="recipe-card__content">
@@ -26,11 +33,6 @@ const heroHeight = heights[seed % heights.length];
         {tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
       </div>
     )}
-    <div class="actions">
-      <span>View</span>
-      <span>Plan</span>
-      <span>Shop</span>
-    </div>
   </div>
 </a>
 
@@ -40,60 +42,72 @@ const heroHeight = heights[seed % heights.length];
     width: 100%;
     text-decoration: none;
     color: inherit;
-    border: 1px solid #eee8df;
-    border-radius: 18px;
+    border: 1px solid #e8dccd;
+    border-radius: 22px;
     background: #fff;
     overflow: hidden;
-    margin-bottom: 14px;
-    transition: transform 140ms ease, box-shadow 140ms ease;
+    margin-bottom: 16px;
+    transition: transform 160ms ease, box-shadow 160ms ease;
     break-inside: avoid;
   }
 
   .recipe-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(30, 23, 12, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(42, 25, 7, 0.14);
   }
 
   .recipe-card__hero {
-    background: linear-gradient(135deg, #fde8d3 0%, #ffd6ad 45%, #ffb981 100%);
     position: relative;
     display: flex;
     align-items: end;
-    padding: 12px;
+    padding: 14px;
+    isolation: isolate;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(51, 30, 12, 0.42), rgba(0,0,0,0));
+    z-index: 1;
   }
 
   .hero-label {
-    font-size: 0.75rem;
+    position: relative;
+    z-index: 2;
+    font-size: 0.78rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #9a3412;
-    background: rgba(255,255,255,0.8);
+    color: #fff;
+    background: rgba(0,0,0,0.26);
     border-radius: 999px;
-    padding: 4px 8px;
+    padding: 4px 10px;
+    backdrop-filter: blur(3px);
   }
 
   .save-btn {
     position: absolute;
+    z-index: 2;
     top: 10px;
     right: 10px;
     border: 0;
-    background: rgba(255,255,255,0.9);
-    width: 34px;
+    background: #e60023;
+    color: white;
+    font-weight: 700;
+    min-width: 56px;
     height: 34px;
     border-radius: 999px;
-    font-size: 1rem;
-    color: #7c2d12;
+    font-size: 0.78rem;
     cursor: pointer;
   }
 
   .recipe-card__content {
-    padding: 12px;
+    padding: 14px;
   }
 
   .recipe-card h3 {
     margin: 0 0 6px;
-    font-size: 1.02rem;
-    line-height: 1.25;
+    font-size: 1.04rem;
+    line-height: 1.3;
   }
 
   .recipe-card p {
@@ -111,25 +125,10 @@ const heroHeight = heights[seed % heights.length];
 
   .recipe-card__tags span {
     font-size: 0.72rem;
-    background: #fff4e8;
+    background: #fff6ea;
     color: #8a4b08;
-    border: 1px solid #ffd8b0;
+    border: 1px solid #f2d7ba;
     border-radius: 999px;
     padding: 2px 8px;
-  }
-
-  .actions {
-    margin-top: 10px;
-    display: flex;
-    gap: 8px;
-    font-size: 0.72rem;
-    color: #5f4a38;
-  }
-
-  .actions span {
-    border: 1px solid #ece0d2;
-    border-radius: 999px;
-    padding: 2px 8px;
-    background: #fffaf5;
   }
 </style>
