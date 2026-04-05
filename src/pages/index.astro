@@ -1,63 +1,52 @@
 ---
+import { getEmDashCollection } from "emdash";
 import Base from "../layouts/Base.astro";
 import RecipeCard from "../components/RecipeCard.astro";
 
-const sampleRecipes = [
-  {
-    id: "garlic-pasta",
-    title: "Creamy Garlic Pasta",
-    description: "Rich and creamy pasta with roasted garlic and herbs",
-    image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=300&fit=crop",
-    cookTime: "25 min",
-    difficulty: "Easy",
-    rating: 4.8
-  },
-  {
-    id: "quinoa-bowl",
-    title: "Mediterranean Quinoa Bowl",
-    description: "Healthy quinoa with fresh vegetables and feta cheese",
-    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop",
-    cookTime: "20 min",
-    difficulty: "Easy",
-    rating: 4.6
-  },
-  {
-    id: "chocolate-cookies",
-    title: "Chocolate Chip Cookies",
-    description: "Classic homemade cookies with melty chocolate chips",
-    image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop",
-    cookTime: "30 min",
-    difficulty: "Medium",
-    rating: 4.9
-  },
-  {
-    id: "grilled-salmon",
-    title: "Grilled Salmon",
-    description: "Perfectly grilled salmon with lemon and herbs",
-    image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=300&fit=crop",
-    cookTime: "15 min",
-    difficulty: "Medium",
-    rating: 4.7
-  },
-  {
-    id: "thai-curry",
-    title: "Thai Green Curry",
-    description: "Spicy and aromatic curry with fresh vegetables",
-    image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&h=300&fit=crop",
-    cookTime: "35 min",
-    difficulty: "Hard",
-    rating: 4.5
-  },
-  {
-    id: "caprese-salad",
-    title: "Fresh Caprese Salad",
-    description: "Simple salad with tomatoes, mozzarella, and basil",
-    image: "https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=400&h=300&fit=crop",
-    cookTime: "10 min",
-    difficulty: "Easy",
-    rating: 4.4
-  }
-];
+// Try to get recipes from EmDash, fallback to sample data if not available
+let recipes = [];
+try {
+  const { entries, cacheHint } = await getEmDashCollection("recipes", {
+    orderBy: { created_at: "desc" },
+  });
+  Astro.cache.set(cacheHint);
+  recipes = entries;
+} catch (error) {
+  console.warn("EmDash not available, using sample data:", error.message);
+  // Fallback sample data
+  recipes = [
+    {
+      id: "garlic-pasta",
+      data: {
+        title: "Creamy Garlic Pasta",
+        description: "Rich and creamy pasta with roasted garlic and herbs",
+        cook_time: "25 min",
+        difficulty: "Easy",
+        rating: 4.8
+      }
+    },
+    {
+      id: "quinoa-bowl",
+      data: {
+        title: "Mediterranean Quinoa Bowl",
+        description: "Healthy quinoa with fresh vegetables and feta cheese",
+        cook_time: "20 min",
+        difficulty: "Easy", 
+        rating: 4.6
+      }
+    },
+    {
+      id: "thai-curry",
+      data: {
+        title: "Thai Green Curry",
+        description: "Spicy and aromatic curry with fresh vegetables",
+        cook_time: "35 min",
+        difficulty: "Hard",
+        rating: 4.5
+      }
+    }
+  ];
+}
 ---
 
 <Base title="Pantry - Recipe Collection">
@@ -68,16 +57,30 @@ const sampleRecipes = [
       <div class="hero-actions">
         <a href="/recipes" class="btn btn-primary">Browse Recipes</a>
         <a href="/meal-planner" class="btn btn-secondary">Plan Meals</a>
+        <a href="/_emdash/admin" class="btn btn-admin">Admin Panel</a>
       </div>
     </header>
 
     <section class="featured-recipes">
       <h2>Featured Recipes</h2>
-      <div class="recipe-grid">
-        {sampleRecipes.map(recipe => (
-          <RecipeCard {...recipe} />
-        ))}
-      </div>
+      {recipes.length === 0 ? (
+        <div class="empty-state">
+          <p>No recipes yet! <a href="/_emdash/admin/content/recipes/new">Create your first recipe</a> in the admin panel.</p>
+        </div>
+      ) : (
+        <div class="recipe-grid">
+          {recipes.map(recipe => (
+            <RecipeCard 
+              id={recipe.id}
+              title={recipe.data.title}
+              description={recipe.data.description}
+              cookTime={recipe.data.cook_time}
+              difficulty={recipe.data.difficulty}
+              rating={recipe.data.rating}
+            />
+          ))}
+        </div>
+      )}
     </section>
   </div>
 </Base>
@@ -144,6 +147,35 @@ const sampleRecipes = [
   .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
+  }
+
+  .btn-admin {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-admin:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .empty-state a {
+    color: #ff6b6b;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .empty-state a:hover {
+    text-decoration: underline;
   }
 
   .featured-recipes h2 {

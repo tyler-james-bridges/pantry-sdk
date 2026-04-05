@@ -1,0 +1,90 @@
+{
+  "collections": [
+    {
+      "id": "recipes",
+      "label": "Recipes", 
+      "description": "Recipe collection for the pantry",
+      "fields": [
+        {
+          "id": "title",
+          "label": "Recipe Name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "description",
+          "label": "Description", 
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "featured_image",
+          "label": "Featured Image",
+          "type": "image",
+          "required": false
+        },
+        {
+          "id": "cook_time", 
+          "label": "Cook Time",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "servings",
+          "label": "Servings",
+          "type": "number", 
+          "required": true
+        },
+        {
+          "id": "difficulty",
+          "label": "Difficulty",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "Easy", "label": "Easy" },
+            { "value": "Medium", "label": "Medium" },
+            { "value": "Hard", "label": "Hard" }
+          ]
+        },
+        {
+          "id": "rating",
+          "label": "Rating",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "ingredients",
+          "label": "Ingredients",
+          "type": "blocks",
+          "required": true,
+          "blocks": [
+            {
+              "id": "ingredient",
+              "label": "Ingredient",
+              "fields": [
+                { "id": "amount", "label": "Amount", "type": "string", "required": true },
+                { "id": "unit", "label": "Unit", "type": "string", "required": false },
+                { "id": "name", "label": "Ingredient Name", "type": "string", "required": true }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "instructions", 
+          "label": "Instructions",
+          "type": "blocks",
+          "required": true,
+          "blocks": [
+            {
+              "id": "step",
+              "label": "Step",
+              "fields": [
+                { "id": "step_text", "label": "Instruction", "type": "text", "required": true }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
