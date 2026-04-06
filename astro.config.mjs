@@ -14,15 +14,20 @@ let config = {
 };
 
 if (isCloudflare) {
-	// Basic Cloudflare deployment - DISABLE ALL AUTO-BINDINGS
+	// Cloudflare deployment with EmDash
 	const cloudflare = await import("@astrojs/cloudflare");
-	
+	const emdash = await import("emdash/astro");
+	const { d1, r2, sandbox } = await import("@emdash-cms/cloudflare");
+
 	config.output = "server";
-	config.adapter = cloudflare.default({
-		mode: "directory",
-		// DISABLE IMAGE PROCESSING TO PREVENT KV SESSION
-		imageService: "no-op"
-	});
+	config.adapter = cloudflare.default({ mode: "directory" });
+	config.integrations.push(
+		emdash.default({
+			database: d1({ binding: "pantry_sdk_db", session: "auto" }),
+			storage: r2({ binding: "MEDIA" }),
+			sandboxRunner: sandbox(),
+		})
+	);
 } else {
 	// Static build for Vercel/other platforms
 	config.output = "static";

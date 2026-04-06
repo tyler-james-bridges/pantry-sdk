@@ -13,6 +13,20 @@
 			"preview_id": "a3d453c4400642e8bd023c7b16fc6f9c"
 		}
 	],
+	"d1_databases": [
+		{
+			"binding": "pantry_sdk_db",
+			"database_name": "pantry-sdk-db",
+			"database_id": "f7805f4c-ff83-4f34-9d1b-af9911161f1b",
+			"remote": true
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "pantry-sdk-media"
+		}
+	],
 	"observability": {
 		"enabled": true
 	}
