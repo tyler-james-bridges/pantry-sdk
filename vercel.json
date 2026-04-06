@@ -3,10 +3,11 @@
   "devCommand": "npm run dev",
   "framework": "astro",
   "installCommand": "npm install",
-  "rewrites": [
+  "redirects": [
     {
       "source": "/_emdash/:path*",
-      "destination": "https://pantry-sdk.tylerscv22.workers.dev/_emdash/:path*"
+      "destination": "https://pantry-sdk.tylerscv22.workers.dev/_emdash/:path*",
+      "permanent": false
     }
   ]
 }
