@@ -10,11 +10,13 @@
     "pay:test": "node scripts/pay-plan-meal.mjs"
   },
   "dependencies": {
-    "@x402/evm": "^2.9.0",
-    "@x402/fetch": "^2.9.0",
+    "@x402/core": "2.18.0",
+    "@x402/evm": "2.18.0",
+    "@x402/express": "2.18.0",
+    "@x402/extensions": "2.18.0",
+    "@x402/fetch": "2.18.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "x402-express": "^0.4.1",
-    "viem": "^2.21.58"
+    "viem": "^2.47.6"
   }
 }
