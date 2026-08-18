@@ -3,9 +3,25 @@ require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-let paymentMiddleware = null;
+let x402 = null;
 try {
-  ({ paymentMiddleware } = require('x402-express'));
+  const { paymentMiddleware, x402ResourceServer } = require('@x402/express');
+  const { HTTPFacilitatorClient } = require('@x402/core/server');
+  const { ExactEvmScheme } = require('@x402/evm/exact/server');
+  const {
+    BUILDER_CODE,
+    builderCodeResourceServerExtension,
+    declareBuilderCodeExtension
+  } = require('@x402/extensions/builder-code');
+  x402 = {
+    paymentMiddleware,
+    x402ResourceServer,
+    HTTPFacilitatorClient,
+    ExactEvmScheme,
+    BUILDER_CODE,
+    builderCodeResourceServerExtension,
+    declareBuilderCodeExtension
+  };
 } catch {
   // x402 optional during local dev until dependency is installed
 }
@@ -15,8 +31,15 @@ app.use(express.json());
 
 const recipes = JSON.parse(fs.readFileSync(path.join(__dirname, 'recipes.json'), 'utf8'));
 
-const x402Enabled = Boolean(paymentMiddleware && process.env.X402_PAY_TO);
+const x402Enabled = Boolean(x402 && process.env.X402_PAY_TO);
 const botOnlyMode = String(process.env.BOT_ONLY_MODE || 'false').toLowerCase() === 'true';
+const baseBuilderCode = 'bc_jhxtiha3';
+
+function normalizeNetwork(network) {
+  if (network === 'base') return 'eip155:8453';
+  if (network === 'base-sepolia') return 'eip155:84532';
+  return network;
+}
 
 function isLikelyBotRequest(req) {
   const ua = String(req.headers['user-agent'] || '').toLowerCase();
@@ -28,61 +51,40 @@ function isLikelyBotRequest(req) {
 }
 
 if (x402Enabled) {
-  const x402Gate = paymentMiddleware({
-    network: process.env.X402_NETWORK || 'base-sepolia',
-    payTo: process.env.X402_PAY_TO,
-    resources: [
-      {
-        path: '/shopping-list',
-        method: 'POST',
-        price: '$0.01',
-        name: 'PantrySDK Shopping List',
-        description: 'Aggregate ingredients across selected recipes'
-      },
-      {
-        path: '/substitute',
-        method: 'POST',
-        price: '$0.01',
-        name: 'PantrySDK Substitute',
-        description: 'Ingredient substitutions with profile-aware options'
-      },
-      {
-        path: '/plan-meal',
-        method: 'POST',
-        price: '$0.03',
-        name: 'PantrySDK Meal Planner',
-        description: 'Build meal plan + combined shopping list'
-      },
-      {
-        path: '/recipe/:id/transform',
-        method: 'POST',
-        price: '$0.02',
-        name: 'PantrySDK Recipe Transform',
-        description: 'Transform recipe for dietary profile and constraints'
-      },
-      {
-        path: '/pantry-match',
-        method: 'POST',
-        price: '$0.02',
-        name: 'PantrySDK Pantry Match',
-        description: 'Match pantry ingredients to best recipes'
-      },
-      {
-        path: '/leftovers-remix',
-        method: 'POST',
-        price: '$0.02',
-        name: 'PantrySDK Leftovers Remix',
-        description: 'Remix leftovers into recommended meal ideas'
-      },
-      {
-        path: '/batch-prep',
-        method: 'POST',
-        price: '$0.04',
-        name: 'PantrySDK Batch Prep',
-        description: 'Generate batch-prep schedule and prep blocks'
-      }
-    ]
+  const network = normalizeNetwork(process.env.X402_NETWORK || 'base-sepolia');
+  const facilitatorUrl =
+    process.env.X402_FACILITATOR_URL || 'https://x402.org/facilitator';
+  const resourceServer = new x402.x402ResourceServer(
+    new x402.HTTPFacilitatorClient({ url: facilitatorUrl })
+  )
+    .register(network, new x402.ExactEvmScheme())
+    .registerExtension(x402.builderCodeResourceServerExtension);
+  const extensions = {
+    [x402.BUILDER_CODE]: x402.declareBuilderCodeExtension(baseBuilderCode)
+  };
+  const paidRoute = (price, description) => ({
+    accepts: [{
+      scheme: 'exact',
+      network,
+      payTo: process.env.X402_PAY_TO,
+      price
+    }],
+    description,
+    mimeType: 'application/json',
+    extensions
   });
+  const x402Gate = x402.paymentMiddleware(
+    {
+      'POST /shopping-list': paidRoute('$0.01', 'Aggregate ingredients across selected recipes'),
+      'POST /substitute': paidRoute('$0.01', 'Ingredient substitutions with profile-aware options'),
+      'POST /plan-meal': paidRoute('$0.03', 'Build meal plan and combined shopping list'),
+      'POST /recipe/:id/transform': paidRoute('$0.02', 'Transform recipe for dietary profile and constraints'),
+      'POST /pantry-match': paidRoute('$0.02', 'Match pantry ingredients to best recipes'),
+      'POST /leftovers-remix': paidRoute('$0.02', 'Remix leftovers into recommended meal ideas'),
+      'POST /batch-prep': paidRoute('$0.04', 'Generate batch-prep schedule and prep blocks')
+    },
+    resourceServer
+  );
 
   app.use((req, res, next) => {
     if (!botOnlyMode) return x402Gate(req, res, next);
